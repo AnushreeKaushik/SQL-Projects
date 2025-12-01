@@ -1,0 +1,70 @@
+ -------------------- Hospital Dataset Analysis----------------------
+
+- Performed end-to-end analysis on a hospital dataset containing 100+ records across departments, locations and medical details.
+- Applied SQL functions such as SUM, AVG, GROUP BY, ORDER BY, DATEDIFF, LIMIT to derive business insights.
+- Identified top departments by patient volume, highest medical expenditure hospital, and longest hospital stay cases.
+- Generated city-wise patient reports and department-wise average length of stay for healthcare decision-making.
+- Designed optimized analytical queries useful for hospital performance monitoring and reporting.
+
+1. Total Number of Patients.
+    select sum(`Patients Count`)
+    from h_d;
+
+
+2. Average Number of Doctors per Hospital.
+   select avg(`Doctors Count`) 
+   from h_d;
+
+
+3. Top 3 Departments with the Highest Number of Patients.
+  select `Patients Count`, `Department` from h_d 
+   order by `Patients Count` desc
+   Limit 3 ;
+  
+4. Hospital with the Maximum Medical Expenses.
+  select `Hospital Name` , `Medical Expenses` from h_d
+   order by `Medical Expenses` desc
+    limit 1;
+
+5. Daily Average Medical Expenses.
+  SELECT `Hospital Name`,`Medical Expenses`, 
+  DATEDIFF(`Discharge Date`, `Admission Date`) AS Days_Stayed,
+  (`Medical Expenses` / DATEDIFF(`Discharge Date`, `Admission Date`)) AS       Daily_Avg_Expense
+  FROM h_d;
+
+
+6. Longest Hospital Stay .   
+select `Patients Count`,  `Hospital Name`, `Location`,`Department`,
+`Medical Expenses`,
+ datediff(`Discharge Date`, `Admission Date`) AS Max_Days_Stayed from h_d
+ order by datediff(`Discharge Date`, `Admission Date`) desc 
+ Limit 1;
+ select * from h_d;
+
+7. Total Patients Treated Per City 
+ select `Location` , sum(`Patients Count`) AS Total_Patients_Treated
+ from h_d      
+ group by `Location`;  
+
+
+8.	Average Length of Stay Per Department 
+ select `Department`,
+ avg(datediff(`Discharge Date`, `Admission Date`)) AS Avg_Days_Stayed 
+from h_d
+group by  `Department`;
+
+
+9.	Identify the Department with the Lowest Number of Patients
+SELECT `Department`,SUM(`Patients Count`) AS Total_Patients
+FROM h_d
+GROUP BY `Department`
+ORDER BY Total_Patients ASC;
+
+
+10.	Monthly Medical Expenses Report.
+SELECT DATE_FORMAT(`Admission Date`, '%M') AS Month,
+SUM(`Medical Expenses`) AS Total_Medical_Expenses
+FROM h_d
+GROUP BY DATE_FORMAT(`Admission Date`, '%M')
+ORDER BY MONTH ;
+
